@@ -25,4 +25,4 @@ class HTMLNode():
         children: {self.children}
         props: {self.props}
         '''
-        return html_node_str 
+        return html_node_str

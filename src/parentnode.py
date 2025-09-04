@@ -12,11 +12,16 @@ class ParentNode(HTMLNode):
             return ValueError("Error: parent node doesn't have children")
         
         html_string = f'<{self.tag}' 
-        props_html = ''
+              
         if self.props:
             html_string += self.props_to_html()
 
         html_string += '>'
-        html_string += '</{self.tag}>'
+        
+        if self.children:
+            for child in self.children:
+                html_string += child.to_html()
+        
+        html_string += f'</{self.tag}>'
 
         return html_string

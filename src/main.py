@@ -1,5 +1,7 @@
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode
+from parentnode import ParentNode
+from leafnode import LeafNode
 
 def main():
     tn = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
