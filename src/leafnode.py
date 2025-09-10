@@ -35,5 +35,5 @@ def text_node_to_html_node(text_node):
         return LeafNode(tn_type.value, text_node.text, props)
 
     elif tn_type == TextType.IMAGE:
-        prop = {"src":text_node.url, "alt":text_node.text}
+        props = {"src":text_node.url, "alt":text_node.text}
         return LeafNode(tn_type.value, None, props)
