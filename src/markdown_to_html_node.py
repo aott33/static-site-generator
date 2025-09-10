@@ -4,9 +4,12 @@ from textnode import TextNode, TextType
 from text_to_textnodes import text_to_textnodes
 from leafnode import text_node_to_html_node
 from parentnode import ParentNode
+import re
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
+
+    print(f'Length of blocks: {len(blocks)}')
 
     parent = ParentNode('div', [])
     
@@ -14,7 +17,10 @@ def markdown_to_html_node(markdown):
         block_type = block_to_blocktype(block)
         children = []
         if block_type == BlockType.CODE:
-            formatted = '\n'.join(block.split('\n')[1:-1])
+            inner_lines = block.split("\n")[1:-1]
+            common = min((len(l) - len(l.lstrip(" "))) for l in inner_lines if l.strip() != "")
+            inner_lines = [l[common:] if len(l) >= common else l for l in inner_lines]
+            formatted = "\n".join(inner_lines) + "\n"
             text_node = TextNode(formatted, TextType.CODE)
             children = [text_node_to_html_node(text_node)]
         
@@ -43,7 +49,8 @@ def markdown_to_html_node(markdown):
             children = text_to_children(clean_text)
 
         else:
-            children = text_to_children(block)
+            content = normalize_paragraph(block)
+            children = text_to_children(content)
 
         tag = get_block_type_tag(block_type, block)
 
@@ -73,3 +80,5 @@ def get_block_type_tag(block_type, block):
     else:
         return block_type.value
 
+def normalize_paragraph(text):
+    return re.sub(r"\s+", " ", text).strip()

@@ -1,11 +1,8 @@
 def markdown_to_blocks(markdown):
-	md_blocks = []
-	md_split = markdown.split('\n\n')
-
-	for md_block in md_split:
-		if not md_block:
-			continue
-
-		md_blocks.append(md_block.strip())
-
-	return md_blocks
+    blocks = []
+    print(repr(markdown))
+    for chunk in markdown.split("\n\n"):
+        block = chunk.strip()
+        if block:
+            blocks.append(block)
+    return blocks
