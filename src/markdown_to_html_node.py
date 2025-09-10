@@ -1,5 +1,5 @@
 from markdown_to_blocks import markdown_to_blocks
-from block_to_blocktype import block_to_blocktype, BlockType
+from blocktype import block_to_blocktype, BlockType
 from textnode import TextNode, TextType
 from text_to_textnodes import text_to_textnodes
 from leafnode import text_node_to_html_node
@@ -15,8 +15,33 @@ def markdown_to_html_node(markdown):
         children = []
         if block_type == BlockType.CODE:
             formatted = '\n'.join(block.split('\n')[1:-1])
-            text_node = TextNode(formatted, TextType.TEXT)
+            text_node = TextNode(formatted, TextType.CODE)
             children = [text_node_to_html_node(text_node)]
+        
+        elif block_type in [BlockType.ORDERED_LIST, BlockType.UNORDERED_LIST]:
+            split_list = block.split('\n')
+            
+            list_children = []
+
+            for list_item in split_list:
+                list_item_content = list_item.split(' ', 1)[1]
+                list_item_children = text_to_children(list_item_content)
+                list_item_node = ParentNode('li', list_item_children)
+                list_children.append(list_item_node)
+            children = list_children
+
+        elif block_type == BlockType.QUOTE:
+            split_list = block.split('\n')
+            
+            cleaned_lines = []
+
+            for line in split_list:
+                cleaned_lines.append(line.split('>', 1)[1])
+
+            clean_text = '\n'.join(cleaned_lines)
+
+            children = text_to_children(clean_text)
+
         else:
             children = text_to_children(block)
 
