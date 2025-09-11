@@ -8,7 +8,7 @@ This static site generator converts markdown content into a fully functional web
 
 ## Demo Site
 
-The generator was used to build a [J.R. Tolkien Fan Club website](https://github.com/aott33/static-site-generator). You can view the live site and explore the generated output to see the tool in action.
+The generator was used to build a [J.R. Tolkien Fan Club website](https://aott33.github.io/static-site-generator/). You can view the live site and explore the generated output to see the tool in action.
 
 ## Features
 
