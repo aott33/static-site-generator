@@ -2,7 +2,7 @@ import os
 from markdown_to_html_node import markdown_to_html_node
 from extract_title import extract_title
 
-def generate_pages_recursive(from_path, template_path, dest_path):
+def generate_pages_recursive(basepath, from_path, template_path, dest_path):
 
     directory_list = os.listdir(from_path)
     
@@ -28,7 +28,8 @@ def generate_pages_recursive(from_path, template_path, dest_path):
 
             template = template.replace('{{ Title }}', title)
             template = template.replace('{{ Content }}', html)
-
+            template = template.replace('href="/', 'href="{basepath}')
+            template = template.replace('src="/', 'src="{basepath}')
             filename = new_dest_path.split('/')[-1]
 
             filename_html = filename.replace('.md', '.html')
@@ -43,4 +44,4 @@ def generate_pages_recursive(from_path, template_path, dest_path):
         
         elif not os.path.isfile(item):
             os.mkdir(new_dest_path)
-            generate_pages_recursive(new_from_path, template_path, new_dest_path)
+            generate_pages_recursive(basepath, new_from_path, template_path, new_dest_path)
