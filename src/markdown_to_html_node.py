@@ -9,10 +9,8 @@ import re
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
 
-    print(f'Length of blocks: {len(blocks)}')
-
     parent = ParentNode('div', [])
-    
+
     for block in blocks:
         block_type = block_to_blocktype(block)
         children = []
@@ -23,7 +21,7 @@ def markdown_to_html_node(markdown):
             formatted = "\n".join(inner_lines) + "\n"
             text_node = TextNode(formatted, TextType.CODE)
             children = [text_node_to_html_node(text_node)]
-        
+
         elif block_type in [BlockType.ORDERED_LIST, BlockType.UNORDERED_LIST]:
             split_list = block.split('\n')
             
@@ -42,11 +40,15 @@ def markdown_to_html_node(markdown):
             cleaned_lines = []
 
             for line in split_list:
-                cleaned_lines.append(line.split('>', 1)[1])
+                cleaned_lines.append(line.split('>', 1)[1].lstrip())
 
             clean_text = '\n'.join(cleaned_lines)
 
             children = text_to_children(clean_text)
+        
+        elif block_type == BlockType.HEADING:
+            cleaned_heading = block.split('# ', 1)[1]
+            children = text_to_children(cleaned_heading)
 
         else:
             content = normalize_paragraph(block)
